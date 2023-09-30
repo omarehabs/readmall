@@ -1,0 +1,1188 @@
+{
+	"info": {
+		"_postman_id": "f833950d-bc4c-4b3b-8030-2a90ca7e369c",
+		"name": "Readmall API v1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22320647"
+	},
+	"item": [
+		{
+			"name": "authors",
+			"item": [
+				{
+					"name": "add new author",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"authorName\": \"the great novelistd\",\r\n    \"birthDate\": \"1999-03-25\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/authors/makeAuthor",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"authors",
+								"makeAuthor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get author by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/authors/getAuthorById/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"authors",
+								"getAuthorById",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get author by name",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/authors/getAuthorByName?name=:name",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"authors",
+								"getAuthorByName"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "doaad",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": ":name"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update author data",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"authorName\" : \"omar moahmed\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/authors/updateAuthor/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"authors",
+								"updateAuthor",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete author by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/authors/deleteAuthor/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"authors",
+								"deleteAuthor",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "signup new user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "an",
+								"value": "test",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\":\"i hope u r okay\",\r\n    \"email\" : \"omarehabsalim@gmail.com\",\r\n    \"fullname\": \"omar ehab salem\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/signup",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\":\"123456789\",\r\n    \"email\" : \"omarehabsal@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get me",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYmFzaWMiLCJpYXQiOjE2OTAzNDY4NDJ9.Fq1zSKG3Kqh798Suqpprxeh7gLY5i1fHs2ujqK83l4M; Path=/; Secure; HttpOnly;",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{url}}/users/me/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"me",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "edit my profile",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "cookie",
+								"value": "accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYmFzaWMiLCJpYXQiOjE2OTAzNDY4NDJ9.Fq1zSKG3Kqh798Suqpprxeh7gLY5i1fHs2ujqK83l4M; Path=/; Secure; HttpOnly;",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullname\" : \"any name is okay 2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/editMyProfile/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"editMyProfile",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "request new token",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users/requestNewToken/:userId",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"requestNewToken",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forgot password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"omarehabsal@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/forgotPassword",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"forgotPassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\" : \"\",\r\n    \"newPassword\" : \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/resetPassword/:userId",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"resetPassword",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "country",
+			"item": [
+				{
+					"name": "add state",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFmZmUyODI5LTZlNzYtNGU4ZS1iZDJiLWU1YTJmMDVhNGYzMCIsInJvbGUiOiJiYXNpYyIsImlhdCI6MTY2ODI4OTgzOX0.0g2tNE033x_YHL-fdlJklDxBmy1w3jhlFsFRcfIh4s4; Path=/; Secure; HttpOnly;",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"country\" : \"QA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/countries/addCountry",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"countries",
+								"addCountry"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "categories",
+			"item": [
+				{
+					"name": "add category",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"categoryName\" : \"math\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/categories/addCategory",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"categories",
+								"addCategory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get category by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/categories/getCategoryById/:categoryId",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"categories",
+								"getCategoryById",
+								":categoryId"
+							],
+							"variable": [
+								{
+									"key": "categoryId",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update category",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"categoryName\" : \"nawal\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/categories/updateCategory/4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"categories",
+								"updateCategory",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete category",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/categories/deleteCategory/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"categories",
+								"deleteCategory",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/categories/getAllCategories",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"categories",
+								"getAllCategories"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "publishers",
+			"item": [
+				{
+					"name": "add new publisher",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"publisherName\": \"dar noon\",\r\n    \"license\": \"KSAs\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/publishers/addPublisher",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"publishers",
+								"addPublisher"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get publisher by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/publishers/getPublisherById/:publisherId",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"publishers",
+								"getPublisherById",
+								":publisherId"
+							],
+							"variable": [
+								{
+									"key": "publisherId",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get publisher by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/publishers/getPublisherByName?name=:publishserName",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"publishers",
+								"getPublisherByName"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": ":publishserName"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update publisher",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"license\" :\"Go Home\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/publishers/updatePublisher/:publisherId",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"publishers",
+								"updatePublisher",
+								":publisherId"
+							],
+							"variable": [
+								{
+									"key": "publisherId",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete publisher",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/publishers/deletePublisher/:publisherId",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"publishers",
+								"deletePublisher",
+								":publisherId"
+							],
+							"variable": [
+								{
+									"key": "publisherId",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "books",
+			"item": [
+				{
+					"name": "get book by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/books/getById/5",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"getById",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add new book",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data; charset=UTF-8; boundary=<calculated when request is sent>",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "or not id you do not want to",
+									"type": "text"
+								},
+								{
+									"key": "subTitle",
+									"value": "dummy subtitle",
+									"type": "text"
+								},
+								{
+									"key": "lang",
+									"value": "english",
+									"type": "text"
+								},
+								{
+									"key": "releaseDate",
+									"value": "2023-09-01",
+									"type": "text"
+								},
+								{
+									"key": "pages",
+									"value": "125",
+									"type": "text"
+								},
+								{
+									"key": "authorId",
+									"value": "7",
+									"type": "text"
+								},
+								{
+									"key": "categoryId",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "publisherId",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "uploaderId",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "pdf",
+									"type": "file",
+									"src": "/D:/omar/سالم وبرامج وأشياء آخرى/DC Lec2.pdf"
+								},
+								{
+									"key": "cover",
+									"type": "file",
+									"src": "/D:/omar/phone/camera/٢٠٢١٠٤١٤_١٨٠٧٢٨.jpg"
+								},
+								{
+									"key": "desc",
+									"value": "this is a great description about a great book",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/books/uploadPdf",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"uploadPdf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get books by category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/books/getByCategoryId/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"getByCategoryId",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get most viewed books",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/books/getByViews?page=1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"getByViews"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get books by publisher",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/books/getByPublisherId/:publishserId?limit= 60",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"getByPublisherId",
+								":publishserId"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": " 60"
+								}
+							],
+							"variable": [
+								{
+									"key": "publishserId",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get books by author",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/books/getByAuthorId/1?page=",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"getByAuthorId",
+								"1"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get recently uploaded books",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/books/getRecentlyUploaded?page=1&limit=50",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"getRecentlyUploaded"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search books",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/books/searchBooks?q=&page=",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"searchBooks"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": ""
+								},
+								{
+									"key": "page",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filter books",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"categoryId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/books/filterBooks?limit=10&page=9",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"filterBooks"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update book",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\" : \"what about this title\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/books/updateBook/:bookId",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"updateBook",
+								":bookId"
+							],
+							"variable": [
+								{
+									"key": "bookId",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "reviews",
+			"item": [
+				{
+					"name": "add new review",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 1,\r\n    \"bookId\": 4,\r\n    \"rate\": 0,\r\n    \"comment\": \"this the first review\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/reviews/addReview",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"reviews",
+								"addReview"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update review",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"comment\" : \"this a comment after update\",\r\n    \"rate\" : 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/reviews/updateReview/:reviewId",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"reviews",
+								"updateReview",
+								":reviewId"
+							],
+							"variable": [
+								{
+									"key": "reviewId",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete review",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/reviews/deleteReview/:reviewId",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"reviews",
+								"deleteReview",
+								":reviewId"
+							],
+							"variable": [
+								{
+									"key": "reviewId",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get review by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/reviews/getReviewById/:reviewId",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"reviews",
+								"getReviewById",
+								":reviewId"
+							],
+							"variable": [
+								{
+									"key": "reviewId",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get book reviews",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/reviews/getBookReviews/:bookId?limit=2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"reviews",
+								"getBookReviews",
+								":bookId"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2"
+								}
+							],
+							"variable": [
+								{
+									"key": "bookId",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

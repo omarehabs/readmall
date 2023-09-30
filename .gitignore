@@ -1,0 +1,9 @@
+node_modules/
+dev.env
+test.env
+production.env
+test/
+tests/
+uploads/
+spec/
+frontend/
