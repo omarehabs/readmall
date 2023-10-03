@@ -129,6 +129,7 @@ Book.findByMostViewed = async function (limit, page) {
 
             },
         ],
+        logging: console.log,
         order: [['views', 'DESC']],
         ...handlePagination(limit, page)
     });

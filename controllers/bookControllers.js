@@ -1,6 +1,6 @@
 const { PDFDocument } = require("pdf-lib");
 const Book = require("../models/BookUtils");
-const {errorHandler} = require("../utils/errorHandler");
+const { errorHandler } = require("../utils/errorHandler");
 const successHandler = require("../utils/successHandler");
 const handleNumOfPages = require("../utils/handleNumOfPages");
 const {
@@ -20,14 +20,17 @@ async function getBookByIdCtrl(req, res) {
   }
 
   try {
-    const {book, recommendations} = await Book.getBookById(id);
+    const { book, recommendations } = await Book.getBookById(id);
     if (book) {
       await book.increment("views", { by: 1 });
       // if (book.bookUrl.includes(".pdf")) {
       //   const bookUrl = await getFileSignedUrl(bucketName, book.bookUrl, 45);
       //   book.bookUrl = bookUrl;
       // }
-      return successHandler(res, 200, "find book succeffully", { book,recommendations });
+      return successHandler(res, 200, "find book succeffully", {
+        book,
+        recommendations,
+      });
     } else {
       return successHandler(res, 200, "there is no book with such ID");
     }
@@ -119,6 +122,7 @@ async function getMostViewedBooksCtrl(req, res) {
         books: [],
       });
     }
+    console.log(count);
     return successHandler(res, 200, `found books successfully.`, {
       numOfPages: handleNumOfPages(count, limit, 10),
       books,
