@@ -4,7 +4,6 @@ const { errorHandler, unaAuthorizedError } = require("../utils/errorHandler");
 
 async function isLoggedInAndVerified(req, res, next) {
   if (!req.headers.authorization) {
-    console.log('here is 5')
     return errorHandler(res, 403, {
       message: "you must login first!",
     });
@@ -16,7 +15,6 @@ async function isLoggedInAndVerified(req, res, next) {
       req.headers.authorization.split(" ")[1];
 
     if (!token) {
-      console.log('here is 4')
       return errorHandler(res, 403, {
         message: "you must login first!",
       });
