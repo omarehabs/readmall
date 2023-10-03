@@ -8,6 +8,8 @@ const Order = require('./OrderUtils');
 const Publisher = require('./PublisherUtils');
 const Review = require('./ReviewUtils');
 const User = require('./UserUtils');
+const Cart = require('./CartUtils');
+const Favorite = require('./FavoriteUtils');
 const UserVerificationTokens = require('./UserVerificationTokensUtils');
 
 module.exports = {
@@ -21,5 +23,7 @@ module.exports = {
   Publisher,
   Review,
   User,
-  UserVerificationTokens
+  Favorite,
+  UserVerificationTokens,
+  Cart
 };

@@ -10,10 +10,13 @@ const {
   Book,
   Category,
   Country,
-  // OrderBook,
-  // Order,
+  OrderBook,
+  Order,
   Publisher,
   Review,
+  Cart,
+  Favorite,
+  UserBook
 } = require('./models/models');
 
 

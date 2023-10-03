@@ -133,7 +133,6 @@ Book.findByMostViewed = async function (limit, page) {
         order: [['views', 'DESC']],
         ...handlePagination(limit, page)
     });
-    // if (!book) throw new Error('There no book with such ID.');
     return book;
 };
 

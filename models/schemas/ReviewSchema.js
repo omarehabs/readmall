@@ -47,8 +47,10 @@ Book.hasMany(Review, {
 Review.belongsTo(Book);
 
 User.hasMany(Review, {
+  as: 'userReview',
   foreignKey: {
-    allowNull: false
+    allowNull: false,
+    
   }
 });
 Review.belongsTo(User);
