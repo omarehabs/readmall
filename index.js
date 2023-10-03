@@ -33,6 +33,9 @@ const upload = multer({ dest: 'uploads/' });
 
 
 app.listen(PORT, async () => {
+  await Cart.findOne()
+  await Favorite.findOne()
+  await UserBook.findOne()
   console.log(`server is up on port ${PORT}!`);
   await sequelize.authenticate();
   await sequelize.sync({
