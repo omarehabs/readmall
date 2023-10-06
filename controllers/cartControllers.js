@@ -1,5 +1,6 @@
 const Cart = require("../models/CartUtils");
 const UserBook = require("../models/UserBookUtils");
+const Book = require("../models/BookUtils");
 const { errorHandler, serverError } = require("../utils/errorHandler");
 const basicSuccessHandler = require("../utils/successHandler");
 
@@ -7,6 +8,12 @@ async function addBookToCartCtrl(req, res) {
   const userId = req.userId;
   const bookId = req.body.bookId;
   try {
+    const isPurchaseable = await Book.isBookPurchaseable(bookId, userId);
+    if (!isPurchaseable) {
+      return errorHandler(res, 400, {
+        message: "you can not add to cart a book that is not for selling",
+      });
+    }
     const userHasBook = await UserBook.checkIfUserHasBook(bookId, userId);
     if (userHasBook) {
       return errorHandler(res, 400, {

@@ -17,4 +17,9 @@ Favorite.getAllFavoriteBooks = async function (userId,limit, page ) {
   });
 };
 
+
+Favorite.userFavoritedBook = async function (userId, bookId){
+  return Favorite.count({where: {userId, bookId}})
+}
+
 module.exports = Favorite;

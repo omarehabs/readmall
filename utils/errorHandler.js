@@ -8,7 +8,7 @@ function errorHandler(res, statusCode, error) {
 }
 
 function unaAuthorizedError(res) {
-  console.log("error");
+  console.log("error",'unaAuthorizedError');
   return res.status(403).json({
     error: true,
     message: "you are not allowed to perform this action",
@@ -16,6 +16,7 @@ function unaAuthorizedError(res) {
 }
 
 function serverError(res) {
+  console.log("error",'serverError');
   return res.status(503).json({
       error: true,
       message: 'server error please try again later'

@@ -75,8 +75,7 @@ async function updateAuthorCtrl(req, res) {
 
   try {
     const author = await Author.updateAuthor(authorId, value);
-    console.log(author);
-
+  
     if (author[0] > 0) {
       return successHandler(res, 200, `${author[0]} Author updated successfully.`, {
         authorUpdated: author[1]

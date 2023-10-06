@@ -93,7 +93,7 @@ async function deleteCategortCtrl(req, res) {
 async function getAllCategoriesCtrl(req, res) {
   try {
     const categories = await Category.getAllCategories();
-    console.log(categories)
+
     if (categories.length > 0) {
       return successHandler(res, 200, 'got all categories successfully', { categories });
     }

@@ -1,5 +1,9 @@
 const { PDFDocument } = require("pdf-lib");
 const Book = require("../models/BookUtils");
+const Favorite = require("../models/FavoriteUtils");
+const Cart = require("../models/CartUtils");
+const UserBook = require("../models/UserBookUtils");
+const Review = require("../models/ReviewUtils");
 const { errorHandler } = require("../utils/errorHandler");
 const successHandler = require("../utils/successHandler");
 const handleNumOfPages = require("../utils/handleNumOfPages");
@@ -15,18 +19,26 @@ const bucketName = process.env.AWS_BUCKET_NAME;
 
 async function getBookByIdCtrl(req, res) {
   const id = req.params.id;
+  const userId = req.userId;
   if (!id) {
     return errorHandler(res, 404, "bookId is required!");
   }
 
   try {
-    const { book, recommendations } = await Book.getBookById(id);
+    let { book, recommendations } = await Book.getBookById(id);
     if (book) {
       await book.increment("views", { by: 1 });
       // if (book.bookUrl.includes(".pdf")) {
       //   const bookUrl = await getFileSignedUrl(bucketName, book.bookUrl, 45);
       //   book.bookUrl = bookUrl;
       // }
+      if (userId) {
+        book = book.toJSON()
+        book["isFav"] = await Favorite.userFavoritedBook(userId, id) ? true : false;
+        book["inCart"] = await Cart.userAddedBookToCart(userId, id) ? true : false;
+        book["isBoughtBook"] = await UserBook.userPurchasedBook(userId, id) ? true : false;
+        book["isReviewed"] = await Review.userReviewedBook(userId, id) ? true : false;
+      }
       return successHandler(res, 200, "find book succeffully", {
         book,
         recommendations,
@@ -122,7 +134,6 @@ async function getMostViewedBooksCtrl(req, res) {
         books: [],
       });
     }
-    console.log(count);
     return successHandler(res, 200, `found books successfully.`, {
       numOfPages: handleNumOfPages(count, limit, 10),
       books,

@@ -20,4 +20,8 @@ UserBook.getAllPurchasedBooks = async function (userId, limit, page) {
     ...handlePagination(limit, page),
   });
 };
+
+UserBook.userPurchasedBook = async function (userId, bookId){
+  return UserBook.count({where: {userId, bookId}})
+}
 module.exports = UserBook;

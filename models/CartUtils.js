@@ -2,7 +2,6 @@ const Book = require("./schemas/BookSchema");
 const Cart = require("./schemas/CartSchema");
 const handlePaginaton = require("../utils/handlePagination");
 Cart.addBookToCart = async function (cartObj) {
-  console.log(cartObj);
   return Cart.create(cartObj);
 };
 
@@ -36,5 +35,10 @@ Cart.getAllCartBooksToCheckout = async function (userId) {
 Cart.emptyCart = async function (userId, t) {
   return await Cart.destroy({ where: { userId }, transaction: t });
 };
+
+
+Cart.userAddedBookToCart = async function (userId, bookId){
+  return Cart.count({where: {userId, bookId}})
+}
 
 module.exports = Cart;

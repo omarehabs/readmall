@@ -1,5 +1,5 @@
 // Function to parse the URL and extract query parameters
-console.log('fdsfsd');
+
 function getQueryParams() {
     const urlSearchParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlSearchParams.entries());
@@ -18,9 +18,9 @@ const submitButton = document.getElementById('submitButton');
 const queryParams = getQueryParams();
 userIdInput.value = queryParams.userId || '';
 tokenInput.value = queryParams.token || '';
-console.log('in the html');
+
 submitButton.addEventListener('click', () => {
-    console.log('in the submit button handle');
+    
 
 
     const userId = userIdInput.value;
@@ -38,7 +38,7 @@ submitButton.addEventListener('click', () => {
         token,
         password,
     };
-    console.log(resetPasswordData);
+    
     fetch('http://localhost:3000/api/v1/users/resetPassword', {
         method: 'POST',
         headers: {
@@ -57,13 +57,13 @@ submitButton.addEventListener('click', () => {
         })
         .then(data => {
             // Display success message
-            console.log(data.message);
+            
             messageDiv.textContent = data.message;
         })
         .catch(error => {
             // Display error message
-            console.log(error.message);
+            
             messageDiv.textContent = error.message;
-            console.error('Error resetting password:', error);
+            
         });
 });

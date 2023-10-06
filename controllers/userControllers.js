@@ -152,7 +152,7 @@ async function verfiyUserEmailCtrl(req, res) {
 
     if (thereIsToken) {
       if ((new Date() - thereIsToken.createdAt) / 100 / 60 / 60 > 4) {
-        console.log(userId, verificatoionToken, "it is expired");
+       // console.log(userId, verificatoionToken, "it is expired");
         // return res.redirect('localhost:3000/api/v1/users/verified');
         await thereIsToken.destroy();
         return res.send(
@@ -222,7 +222,7 @@ async function forgotPasswordCtrl(req, res) {
 
   try {
     const { id: userId } = await User.getIdByEmail(email);
-    console.log(userId);
+
     if (!userId) {
       return errorHandler(res, 404, { message: "no user with this email" });
     }
@@ -295,7 +295,7 @@ async function resetPasswordCtrl(req, res) {
       token
     );
 
-    console.log(isTokenExists, "if ther is token for this user");
+    // console.log(isTokenExists, "if ther is token for this user");
     if (!isTokenExists) {
       return errorHandler(res, 400, {
         message: "no token for such user to rest password",

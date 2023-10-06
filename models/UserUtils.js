@@ -78,7 +78,6 @@ User.paymobBillingData = async function (userId) {
       first_name = name[0];
       last_name = name.slice(1).join(" ");
     }
-    console.log(user, user.phoneNum)
     return {
       email: user.email, //re
       first_name, //re

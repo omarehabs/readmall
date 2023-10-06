@@ -66,4 +66,8 @@ Review.getReviewAuthor = async function (reviewId) {
   });
 };
 
+Review.userReviewedBook = async function (userId, bookId) {
+  return Review.count({where: {userId, bookId}})
+}
+
 module.exports = Review;

@@ -31,17 +31,11 @@ const upload = multer({ dest: "uploads/" });
 
 app.listen(PORT, async () => {
   try {
-    const b = await Cart.findAll({ limit: 1 });
-    console.log(b);
-    const r = await Favorite.findAll({ limit: 1 });
-    console.log(r);
-    const o = await UserBook.findAll({ limit: 1 });
-    console.log(o);
-    console.log(`server is up on port ${PORT}!`);
     await sequelize.authenticate();
     await sequelize.sync({
       alter: true,
     });
+    console.log(`server is running on port ${PORT}`)
   } catch (e) {
     console.log(e);
   }

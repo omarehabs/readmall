@@ -14,15 +14,13 @@ const {
 } = require("../controllers/bookControllers");
 
 const { multerConfig } = require("../helpers/multerUpload");
-const { errorCtrl } = require("../middleware/multerErrorController");
 const BookRouter = express.Router();
 
 const isLoggedInAndVerified = require("../middleware/isLoggedInAndVerified");
-const isLoggedIn = require("../middleware/isLoggedIn");
-const isMe = require("../middleware/isMe");
+const ifLogged = require("../middleware/ifLogged");
 const isAdmin = require("../middleware/isAdmin");
 
-BookRouter.get(`/getById/:id`, getBookByIdCtrl);
+BookRouter.get(`/getById/:id`,ifLogged, getBookByIdCtrl);
 BookRouter.get(`/getByCategoryId/:categoryId`, getCategoryBooksCtrl);
 BookRouter.get(`/getByViews`, getMostViewedBooksCtrl);
 BookRouter.get(`/getByPublisherId/:publisherId`, getBooksByPublisherIdCtrl);
