@@ -23,7 +23,7 @@ const {
 } = process.env;
 
 async function checkoutCtrl(req, res) {
-  const userId =req.userId;
+  const userId = req.userId;
   const t = await sequelize.transaction();
   try {
     const paymobBillingData = await User.paymobBillingData(userId);

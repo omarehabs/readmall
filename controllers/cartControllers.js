@@ -77,7 +77,7 @@ async function getAllCartBooks(req, res) {
         res,
         200,
         `got all cart Books for user with id ${userId}`,
-        { Books: allCartBooks, numOfPages: count }
+        { books: allCartBooks, numOfPages: count }
       );
     }
 
