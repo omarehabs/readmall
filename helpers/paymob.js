@@ -13,7 +13,8 @@ async function getToken(paymobApiKey) {
     const result = await response.json();
     return result.token;
   } catch (e) {
-    return errorHandler(res, 400, e);
+    console.log(e.message)
+    return e
   }
 }
 
@@ -39,7 +40,8 @@ async function getOrderId(items, localOrderId, totalAmount, currency, token) {
     const orderResult = await response.json();
     return orderResult.id;
   } catch (e) {
-    return errorHandler(res, 400, e);
+    console.log(e.message)
+    return e
   }
 }
 
@@ -76,7 +78,8 @@ async function getPaymenyToken(
     const jsonResponse = await paymentTokenResponse.json();
     return jsonResponse.token;
   } catch (e) {
-    return errorHandler(res, 400, e);
+    console.log(e.message)
+    return e
   }
 }
 
