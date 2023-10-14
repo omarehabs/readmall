@@ -5,7 +5,7 @@ const User = require("../models/UserUtils");
 const { errorHandler, serverError } = require("../utils/errorHandler");
 const successHandler = require("../utils/successHandler");
 const sequelize = require("../config/dbConfig");
-const handleNumOfPages = require('../utils/handleNumOfPages')
+const handleNumOfPages = require("../utils/handleNumOfPages");
 const {
   getToken,
   getOrderId,
@@ -23,7 +23,7 @@ const {
 } = process.env;
 
 async function checkoutCtrl(req, res) {
-  const userId = req.userId;
+  const userId =  req.userId;
   const t = await sequelize.transaction();
   try {
     const paymobBillingData = await User.paymobBillingData(userId);
@@ -38,6 +38,7 @@ async function checkoutCtrl(req, res) {
     });
 
     const order = await Order.createOrder(cartBooksToBuy, userId, t);
+
     const paymobToken = await getToken(PAYMOB_API_KEY);
     const paymobOrderId = await getOrderId(
       paymobOrderItems,
@@ -55,13 +56,16 @@ async function checkoutCtrl(req, res) {
       paymobBillingData,
       PAYMOB_INTEGRATION_ID
     );
+
+    console.log(paymobPaymentToken)
     await t.commit();
     return res.redirect(
       `${PAYMOB_IFRAME_LINK}/${PAYMOB_IFRAME_CARD_INTEGRATION_NUMBER}?payment_token=${paymobPaymentToken}`
     );
   } catch (e) {
     await t.rollback();
-    return errorHandler(res, 400, e);
+    // return errorHandler(res, 400, e);
+    return res.send(e);
   }
 }
 
@@ -177,7 +181,11 @@ async function allUserOrdersCtrl(req, res) {
   const { limit, page } = req.query;
 
   try {
-    const { rows: orders, count } = await Order.getAllUserOrders(userId,limit, page);
+    const { rows: orders, count } = await Order.getAllUserOrders(
+      userId,
+      limit,
+      page
+    );
     return successHandler(
       res,
       200,
@@ -196,5 +204,5 @@ module.exports = {
   checkoutCtrl,
   transactionCallbackCtrl,
   getTransactionCallbackCtrl,
-  allUserOrdersCtrl
+  allUserOrdersCtrl,
 };

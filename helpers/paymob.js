@@ -1,20 +1,17 @@
 const crypto = require('crypto')
 const { errorHandler } = require("../utils/errorHandler");
-const fetch = require('node-fetch')
+const axios = require('axios')
 async function getToken(paymobApiKey) {
   try {
     const body = JSON.stringify({
       api_key: paymobApiKey,
     });
-    const response = await fetch("https://accept.paymob.com/api/auth/tokens", {
-      method: "POST",
+    const response = await axios.post("https://accept.paymob.com/api/auth/tokens",body, {
       headers: { "Content-Type": "application/json" },
-      body,
+      
     });
-    const result = await response.json();
-    return result.token;
+    return response.data.token;
   } catch (e) {
-    console.log(e.message)
     return e
   }
 }
@@ -30,18 +27,14 @@ async function getOrderId(items, localOrderId, totalAmount, currency, token) {
       items,
     });
 
-    const response = await fetch(
-      "https://accept.paymob.com/api/ecommerce/orders",
+    const response = await  axios.post(
+      "https://accept.paymob.com/api/ecommerce/orders",body,
       {
-        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body,
       }
     );
-    const orderResult = await response.json();
-    return orderResult.id;
+    return response.data.id;
   } catch (e) {
-    console.log(e.message)
     return e
   }
 }
@@ -67,19 +60,16 @@ async function getPaymenyToken(
       lock_order_when_paid: "false",
     });
 
-    const paymentTokenResponse = await fetch(
+    const paymentTokenResponse = await axios.post(
       "https://accept.paymob.com/api/acceptance/payment_keys",
+      body,
       {
-        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body,
       }
     );
-
-    const jsonResponse = await paymentTokenResponse.json();
-    return jsonResponse.token;
+console.log(paymentTokenResponse)
+    return paymentTokenResponse.data.token;
   } catch (e) {
-    console.log(e.message)
     return e
   }
 }

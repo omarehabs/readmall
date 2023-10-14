@@ -16,6 +16,7 @@
     "@aws-sdk/client-s3": "^3.370.0",
     "@aws-sdk/s3-request-presigner": "^3.370.0",
     "assert": "^2.0.0",
+    "axios": "^1.5.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "connect-pg-simple": "^7.0.0",
