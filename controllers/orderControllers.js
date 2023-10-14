@@ -49,7 +49,7 @@ async function checkoutCtrl(req, res) {
     }
 
     const order = await Order.createOrder(cartBooksToBuy, userId, t);
-
+    console.log(order.toJSON(), 'local order')
     if (!order["id"]) {
       return errorHandler(res, 400, {
         message: "something went wrong with order Id",
@@ -86,14 +86,14 @@ async function checkoutCtrl(req, res) {
       paymobBillingData,
       PAYMOB_INTEGRATION_ID
     );
-    
+
   if (typeof paymobPaymentToken !== "string") {
       return errorHandler(res, 400, {
         message: paymobToken,
       });
     }
     await t.commit();
-    res.send(
+   return res.send(
       `${PAYMOB_IFRAME_LINK}/${PAYMOB_IFRAME_CARD_INTEGRATION_NUMBER}?payment_token=${paymobPaymentToken}`
     );
   } catch (e) {
