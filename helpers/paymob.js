@@ -31,7 +31,7 @@ async function getOrderId(items, localOrderId, totalAmount, currency, token) {
     });
 
     const response = await axios.post(
-      "https://accept.paymob.com/api/ecommerce/offers",
+      "https://accept.paymob.com/api/ecommerce/orders",
       body,
       {
         headers: { "Content-Type": "application/json" },
