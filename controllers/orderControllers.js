@@ -23,7 +23,7 @@ const {
 } = process.env;
 
 async function checkoutCtrl(req, res) {
-  const userId =  req.userId;
+  const userId = req.userId;
   const t = await sequelize.transaction();
   try {
     const paymobBillingData = await User.paymobBillingData(userId);
@@ -37,9 +37,32 @@ async function checkoutCtrl(req, res) {
       };
     });
 
+    if (paymobOrderItems.length === 0 || cartBooksToBuy.length === 0) {
+      return errorHandler(res, 400, { message: "no cart items to pay for" });
+    }
+
+    if (!paymobBillingData["phone_number"]) {
+      return errorHandler(res, 400, {
+        message:
+          "phoneNum is required to pay for your orders please provide one",
+      });
+    }
+
     const order = await Order.createOrder(cartBooksToBuy, userId, t);
 
+    if (!order["id"]) {
+      return errorHandler(res, 400, {
+        message: "something went wrong with order Id",
+      });
+    }
+
     const paymobToken = await getToken(PAYMOB_API_KEY);
+    if (typeof paymobToken !== "string") {
+      return errorHandler(res, 400, {
+        message: paymobToken,
+      });
+    }
+
     const paymobOrderId = await getOrderId(
       paymobOrderItems,
       order.id,
@@ -47,6 +70,13 @@ async function checkoutCtrl(req, res) {
       order.currency,
       paymobToken
     );
+
+    if (isNaN(parseInt(paymobOrderId))) {
+      return errorHandler(res, 400, {
+        message: paymobOrderId,
+      });
+    }
+
     const paymobPaymentToken = await getPaymenyToken(
       order.totalAmountInCents,
       paymobToken,
@@ -56,10 +86,14 @@ async function checkoutCtrl(req, res) {
       paymobBillingData,
       PAYMOB_INTEGRATION_ID
     );
-
-    console.log(paymobPaymentToken)
+    
+  if (typeof paymobPaymentToken !== "string") {
+      return errorHandler(res, 400, {
+        message: paymobToken,
+      });
+    }
     await t.commit();
-    return res.redirect(
+    res.send(
       `${PAYMOB_IFRAME_LINK}/${PAYMOB_IFRAME_CARD_INTEGRATION_NUMBER}?payment_token=${paymobPaymentToken}`
     );
   } catch (e) {

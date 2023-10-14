@@ -1,6 +1,8 @@
 require("./config/env.confic");
 const sequelize = require("./config/dbConfig");
 const helmet = require("helmet");
+const https = require("https");
+const fs = require("fs");
 const app = require("./app");
 const PORT = process.env.PORT;
 
@@ -29,13 +31,22 @@ const upload = multer({ dest: "uploads/" });
 // app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(bodyParser.json());
 
+// https
+//   .createServer(
+//     {
+//       // key: fs.readFileSync("key.pem"),
+//       // cert: fs.readFileSync("cert.pem"),
+//       // passphrase: "omarehab",
+//     },
+
 app.listen(PORT, async () => {
   try {
+    console.log(`server is running on port ${PORT}`);
     await sequelize.authenticate();
     await sequelize.sync({
       alter: true,
     });
-    console.log(`server is running on port ${PORT}`)
+    console.log(`server is running on port ${PORT}`);
   } catch (e) {
     console.log(e);
   }

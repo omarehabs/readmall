@@ -1,18 +1,21 @@
-const crypto = require('crypto')
+const crypto = require("crypto");
 const { errorHandler } = require("../utils/errorHandler");
-const axios = require('axios')
+const axios = require("axios");
 async function getToken(paymobApiKey) {
   try {
     const body = JSON.stringify({
       api_key: paymobApiKey,
     });
-    const response = await axios.post("https://accept.paymob.com/api/auth/tokens",body, {
-      headers: { "Content-Type": "application/json" },
-      
-    });
+    const response = await axios.post(
+      "https://accept.paymob.com/api/auth/tokens",
+      body,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
     return response.data.token;
   } catch (e) {
-    return e
+    return e;
   }
 }
 
@@ -27,15 +30,16 @@ async function getOrderId(items, localOrderId, totalAmount, currency, token) {
       items,
     });
 
-    const response = await  axios.post(
-      "https://accept.paymob.com/api/ecommerce/orders",body,
+    const response = await axios.post(
+      "https://accept.paymob.com/api/ecommerce/ofrers",
+      body,
       {
         headers: { "Content-Type": "application/json" },
       }
     );
     return response.data.id;
   } catch (e) {
-    return e
+    return e;
   }
 }
 
@@ -67,10 +71,9 @@ async function getPaymenyToken(
         headers: { "Content-Type": "application/json" },
       }
     );
-console.log(paymentTokenResponse)
     return paymentTokenResponse.data.token;
   } catch (e) {
-    return e
+    return e;
   }
 }
 
@@ -99,8 +102,8 @@ function calculateHmac(
 ) {
   const hmacString = `${amount_cents}${created_at}${currency}${error_occured}${has_parent_transaction}${id}${integration_id}${is_3d_secure}${is_auth}${is_capture}${is_refunded}${is_standalone_payment}${is_voided}${order.id}${owner}${pending}${source_data.pan}${source_data.sub_type}${source_data.type}${success}`;
   const hmac = crypto.createHmac("SHA512", paymobHmac);
-  const genHmac =  hmac.update(hmacString).digest("hex");
-  return genHmac
+  const genHmac = hmac.update(hmacString).digest("hex");
+  return genHmac;
 }
 
 module.exports = {
