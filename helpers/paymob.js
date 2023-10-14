@@ -15,6 +15,7 @@ async function getToken(paymobApiKey) {
     );
     return response.data.token;
   } catch (e) {
+    console.log(e, ' from getToken')
     return e;
   }
 }
@@ -39,6 +40,7 @@ async function getOrderId(items, localOrderId, totalAmount, currency, token) {
     );
     return response.data.id;
   } catch (e) {
+    console.log(e, ' from getOrderId')
     return e;
   }
 }
@@ -73,6 +75,7 @@ async function getPaymenyToken(
     );
     return paymentTokenResponse.data.token;
   } catch (e) {
+    console.log(e, ' from getPaymenyToken')
     return e;
   }
 }
