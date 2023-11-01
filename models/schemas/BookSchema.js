@@ -6,7 +6,7 @@ const Publisher = require("./PublisherSchema");
 const User = require("./UserSchema");
 const Category = require("./CategorySchema");
 
-const { DEFAULT_AVATAR, DEFAULT_PDF } = process.env;
+const { DEFAULT_COVER, DEFAULT_PDF } = process.env;
 
 const Book = sequelize.define(
   "book",
@@ -53,7 +53,7 @@ const Book = sequelize.define(
     coverUrl: {
       type: DataTypes.STRING,
       allowNull: true,
-      defaultValue: DEFAULT_AVATAR,
+      defaultValue: DEFAULT_COVER,
     },
 
     pages: {
