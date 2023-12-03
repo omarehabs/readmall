@@ -5,7 +5,7 @@ const {
   transactionCallbackCtrl,
   getTransactionCallbackCtrl,
   allUserOrdersCtrl,
-} = require("../controllers/orderControllers");
+} =  require("../controllers/orderControllers");
 
 const isLoggedInAndVerified = require("../middleware/isLoggedInAndVerified");
 const orderRouter = express.Router();
