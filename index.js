@@ -38,9 +38,21 @@ const upload = multer({ dest: "uploads/" });
 //       // cert: fs.readFileSync("cert.pem"),
 //       // passphrase: "omarehab",
 //     },
-
+async function createFirstAdmin() {
+  const email = 'root@gmail.com'
+  const user = await User.count({ where: { email } })
+  console.log(user);
+  if (user) {
+    console.log('admin user root@gmail.com')
+  } else {
+    await User.create({ fullname: 'super admin', email, password: 'root1234', role: "admin" })
+    console.log('admin user created: root@gmail.com')
+  }
+}
 app.listen(PORT, async () => {
   try {
+
+    createFirstAdmin()
     console.log(`server is running on port ${PORT}`);
     await sequelize.authenticate();
     await sequelize.sync({
