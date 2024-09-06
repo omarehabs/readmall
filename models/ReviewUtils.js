@@ -1,3 +1,4 @@
+const { Op, Sequelize } = require("sequelize");
 const Review = require("./schemas/ReviewSchema");
 const User = require("./schemas/UserSchema");
 const handlePagination = require("../utils/handlePagination");
@@ -67,7 +68,25 @@ Review.getReviewAuthor = async function (reviewId) {
 };
 
 Review.userReviewedBook = async function (userId, bookId) {
-  return Review.count({where: {userId, bookId}})
+  return Review.count({ where: { userId, bookId } })
+}
+
+Review.getBooksTotalRate = async function (booksIds) {
+  console.log(booksIds, 'books Ids')
+  const rates = await Review.findAll({
+    attributes: [
+      [Sequelize.fn('AVG', Sequelize.col('rate')), 'avgRating'],
+      'bookId'
+    ],
+    where: {
+      bookId: {
+        [Op.in]: booksIds,  // Filters by the list of bookIds
+      },
+    },
+    group: ['bookId']
+  });
+
+  return rates
 }
 
 module.exports = Review;

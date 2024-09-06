@@ -6,6 +6,7 @@ const {
   findAuthorByNameCtrl,
   updateAuthorCtrl,
   deleteAuthorCtrl,
+  getAllAuthorsCtrl
 } = require("../controllers/authorControllers");
 
 const isLoggedInAndVerified = require("../middleware/isLoggedInAndVerified");
@@ -33,5 +34,7 @@ authorRoute.delete(
   isAdmin,
   deleteAuthorCtrl
 );
+
+authorRoute.get('/', getAllAuthorsCtrl)
 
 module.exports = authorRoute;

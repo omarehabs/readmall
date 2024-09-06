@@ -204,7 +204,7 @@ async function getBooksByPublisherIdCtrl(req, res) {
 async function getRecentlyUploadedBooks(req, res) {
   const { limit, page } = req.query;
   try {
-    const { rows: books, count } = await Book.getBooksAddedRecently(
+   const books= await Book.getBooksAddedRecently(
       limit,
       page
     );
@@ -215,8 +215,8 @@ async function getRecentlyUploadedBooks(req, res) {
       });
     }
     return successHandler(res, 200, `found books successfully.`, {
-      numOfPages: handleNumOfPages(count, limit, 10),
-      books,
+      numOfPages: handleNumOfPages(books.numOfBooks, limit, 10),
+      books : books.books,
     });
   } catch (e) {
     return errorHandler(res, 400, e);

@@ -1,4 +1,5 @@
 const Book = require("./BookUtils");
+const Author = require("./AuthorUtils");
 const Favorite = require("./schemas/FavoriteSchema");
 const handlePaginaton = require('../utils/handlePagination')
 Favorite.addFavoriteBook = async function (favObj) {
@@ -12,7 +13,9 @@ Favorite.deleteFavoriteBook = async function (favObj) {
 Favorite.getAllFavoriteBooks = async function (userId,limit, page ) {
   return Favorite.findAndCountAll({
     where: { userId },
-    include: [{ model: Book }],
+    include: [{ model: Book , include:{
+      model: Author
+    }}],
     ...handlePaginaton(limit, page )
   });
 };

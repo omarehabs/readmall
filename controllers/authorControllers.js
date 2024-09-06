@@ -1,8 +1,9 @@
 const Author = require('../models/AuthorUtils');
 const Book = require('../models/BookUtils');
 const { addAuthorSchema, updateAuthorSchema } = require('../utils/schemaValidator/authorSchemaValidator');
-const {errorHandler} = require('../utils/errorHandler');
+const { errorHandler } = require('../utils/errorHandler');
 const successHandler = require('../utils/successHandler');
+const handleNumOfPages = require('../utils/handleNumOfPages')
 
 async function createAuthorCtrl(req, res) {
   const { value, error } = addAuthorSchema.validate(req.body);
@@ -55,7 +56,18 @@ async function findAuthorByNameCtrl(req, res) {
     if (authorsFound.length === 0) {
       return successHandler(res, 200, 'found no authors with such name.', { authors: [] });
     }
-    return successHandler(res, 200, `found ${authorsFound.length} authors successfully.`, { authors: authorsFound, },
+    const authorsBooks = await Book.countAuthorBooks(authorsFound.map((author) => {
+      const auth = author.toJSON()
+      return auth.id
+    }));
+
+    const mappedAuthors = authorsFound.map((author) => {
+      const auth = author.toJSON()
+      const count = authorsBooks.find((co) => co.authorId = author.id)
+      return {...auth,numOfBooks : count?.count ?? 0}
+    })
+    return successHandler(res, 200, `found ${authorsFound.length} authors successfully.`,
+      { authors: mappedAuthors, },
     );
 
   } catch (e) {
@@ -75,7 +87,7 @@ async function updateAuthorCtrl(req, res) {
 
   try {
     const author = await Author.updateAuthor(authorId, value);
-  
+
     if (author[0] > 0) {
       return successHandler(res, 200, `${author[0]} Author updated successfully.`, {
         authorUpdated: author[1]
@@ -85,6 +97,28 @@ async function updateAuthorCtrl(req, res) {
       message: 'No Author with such ID to update.',
     });
 
+  } catch (e) {
+    return errorHandler(res, 400, e);
+  }
+}
+
+async function getAllAuthorsCtrl(req, res) {
+  const { limit, page } = req.query;
+  try {
+    const authors = await Author.getAllAuthors(
+      limit,
+      page
+    );
+    if (authors.numOfAuthors === 0) {
+      return successHandler(res, 200, "no authors added yet", {
+        numOfPages: 0,
+        authors: [],
+      });
+    }
+    return successHandler(res, 200, `found authors successfully.`, {
+      numOfPages: handleNumOfPages(authors.numOfAuthors, limit, 10),
+      authors: authors.authors,
+    });
   } catch (e) {
     return errorHandler(res, 400, e);
   }
@@ -118,4 +152,5 @@ module.exports = {
   findAuthorByNameCtrl,
   updateAuthorCtrl,
   deleteAuthorCtrl,
+  getAllAuthorsCtrl
 };

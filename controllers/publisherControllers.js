@@ -16,7 +16,7 @@ async function addPublisherCtrl(req, res) {
 
   try {
     const publisherCreated = await Publisher.createPublisher(value);
-    return successHandler(res, 400, "Publisher created successfully.", {
+    return successHandler(res, 200, "Publisher created successfully.", {
       publisher: publisherCreated,
     });
   } catch (e) {

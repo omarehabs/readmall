@@ -1,24 +1,21 @@
 require("./config/env.confic");
 const sequelize = require("./config/dbConfig");
-const helmet = require("helmet");
-const https = require("https");
-const fs = require("fs");
 const app = require("./app");
 const PORT = process.env.PORT;
 
 const {
   User,
-  Author,
-  Book,
-  Category,
-  Country,
-  OrderBook,
-  Order,
-  Publisher,
-  Review,
-  Cart,
-  Favorite,
-  UserBook,
+//   Author,
+//   Book,
+//   Category,
+//   Country,
+//   OrderBook,
+//   Order,
+//   Publisher,
+//   Review,
+//   Cart,
+//   Favorite,
+//   UserBook,
 } = require("./models/models");
 
 const multer = require("multer");
@@ -52,12 +49,12 @@ async function createFirstAdmin() {
 app.listen(PORT, async () => {
   try {
 
-    createFirstAdmin()
     console.log(`server is running on port ${PORT}`);
     await sequelize.authenticate();
     await sequelize.sync({
       alter: true,
     });
+    createFirstAdmin()
     console.log(`server is running on port ${PORT}`);
   } catch (e) {
     console.log(e);

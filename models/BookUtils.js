@@ -91,13 +91,26 @@ Book.findByCategoryId = async function (categoryId, limit, page) {
     order: [["createdAt", "DESC"]],
     ...handlePagination(limit, page),
   });
-  // if (!book) throw new Error('There no book with such ID.');
-  return book;
+
+  const rates = await Review.getBooksTotalRate(book.rows.map((book) => {
+    const bk = book.toJSON()
+    return bk.id
+  }))
+  const mappedBooksWithRate = book.rows.map((book) => {
+    const bk = book.toJSON()
+    let rate = rates.find((bookRate) => bookRate.dataValues.bookId === bk.id)
+    return { ...bk, totalReviewsRate: +rate?.dataValues.avgRating ?? 0 }
+  })
+
+
+  return { count: book.count, rows: mappedBooksWithRate };
 };
 
 Book.findByMostViewed = async function (limit, page) {
   const book = await Book.findAndCountAll({
+
     include: [
+
       { model: Author, attributes: ["authorName", "id"] },
       { model: Publisher, attributes: ["publisherName", "id"] },
       { model: User, attributes: ["fullname", "id"] },
@@ -118,7 +131,19 @@ Book.findByMostViewed = async function (limit, page) {
     order: [["views", "DESC"]],
     ...handlePagination(limit, page),
   });
-  return book;
+
+  const rates = await Review.getBooksTotalRate(book.rows.map((book) => {
+    const bk = book.toJSON()
+    return bk.id
+  }))
+  const mappedBooksWithRate = book.rows.map((book) => {
+    const bk = book.toJSON()
+    let rate = rates.find((bookRate) => bookRate.dataValues.bookId === bk.id)
+    return { ...bk, totalReviewsRate: +rate?.dataValues.avgRating ?? 0 }
+  })
+
+
+  return { count: book.count, rows: mappedBooksWithRate };
 };
 
 Book.getBooksByAuthorId = async function (authorId, limit, page) {
@@ -180,7 +205,7 @@ Book.getBooksByPublisherId = async function (publisherId, limit, page) {
 };
 
 Book.getBooksAddedRecently = async function (limit, page) {
-  const book = await Book.findAndCountAll({
+  const books = await Book.findAll({
     include: [
       { model: Author, attributes: ["authorName", "id"] },
       { model: Publisher, attributes: ["publisherName", "id"] },
@@ -203,8 +228,21 @@ Book.getBooksAddedRecently = async function (limit, page) {
 
     ...handlePagination(limit, page),
   });
-  // if (!book) throw new Error('There no book with such ID.');
-  return book;
+  const numOfBooks = await Book.count();
+
+
+  const rates = await Review.getBooksTotalRate(books.map((book) => {
+    const bk = book.toJSON()
+    return bk.id
+  }))
+  const mappedBooksWithRate = books.map((book) => {
+    const bk = book.toJSON()
+    let rate = rates.find((bookRate) => bookRate.dataValues.bookId === bk.id)
+    return { ...bk, totalReviewsRate: +rate?.dataValues.avgRating ?? 0 }
+  })
+
+
+  return { numOfBooks, books: mappedBooksWithRate };
 };
 
 Book.addBook = async function (bookObj) {
@@ -431,4 +469,9 @@ Book.getAuthorBooks = async function (authorId) {
 Book.isBookPurchaseable = async function (bookId) {
   return Book.count({ where: { id: bookId, toBuy: true } });
 };
+
+Book.countAuthorBooks = async function (authorsIds) {
+  const counts = await Book.count({ where: { authorId: { [Op.in]: authorsIds } }, group: ['authorId',] })
+  return counts
+}
 module.exports = Book;

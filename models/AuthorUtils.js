@@ -6,6 +6,11 @@ Author.createAuthor = async function (authorObj) {
   const authorCreated = await Author.create(authorObj);
   return authorCreated;
 };
+Author.getAllAuthors = async function () {
+  const authors = await Author.findAll();
+  const numOfAuthors = await Author.count()
+  return {authors, numOfAuthors};
+};
 
 Author.getAuthorById = async function (id) {
   const author = await Author.findOne({
