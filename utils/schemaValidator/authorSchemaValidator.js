@@ -13,7 +13,7 @@ const updateAuthorSchema = Joi.object({
     bio: Joi.string().max(550),
     birthDate: Joi.date(),
     deathDate: Joi.date(),
-    authorAvatarUrl: Joi.string().uri(),
+    authorAvatarUrl: Joi.string()
 }).or('authorName',
     'bio',
     'birthDate',

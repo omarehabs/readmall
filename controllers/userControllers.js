@@ -29,11 +29,10 @@ async function signupCtrl(req, res) {
 
     if (userCreated) {
       const verificationToken = generateToken();
-      const verificationTokenReturned =
-        await UserVerificationTokens.addVerifyToken(
-          userCreated.id,
-          verificationToken
-        );
+      const verificationTokenReturned = await UserVerificationTokens.addVerifyToken(
+        userCreated.id,
+        verificationToken
+      );
       //  const emailSentStatus = await sendVerificationEmail(userCreated.email, userCreated.id, verificationToken);
       // console.log(verificationTokenReturned, 'verificationTokenReturned');
       // console.log(emailSentStatus, 'emailSentStatus');
@@ -120,6 +119,12 @@ async function getMeCtrl(req, res) {
 
 async function editMyProfileCtrl(req, res) {
   const userId = req.userId;
+  if (req.file) {
+    req.body.avatarUrl = req.body.imagePath + '/' + req.body.imageName
+    delete req.body.imagePath
+    delete req.body.imageName
+  }
+
   const { value, error } = updateUserSchema.validate(req.body);
   if (!userId) {
     return errorHandler(res, 404, { message: "userId is required!" });
@@ -152,7 +157,7 @@ async function verfiyUserEmailCtrl(req, res) {
 
     if (thereIsToken) {
       if ((new Date() - thereIsToken.createdAt) / 100 / 60 / 60 > 4) {
-       // console.log(userId, verificatoionToken, "it is expired");
+        // console.log(userId, verificatoionToken, "it is expired");
         // return res.redirect('localhost:3000/api/v1/users/verified');
         await thereIsToken.destroy();
         return res.send(

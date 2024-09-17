@@ -27,7 +27,7 @@ BookRouter.get(`/getByViews`, getMostViewedBooksCtrl);
 BookRouter.get(`/getByPublisherId/:publisherId`, getBooksByPublisherIdCtrl);
 BookRouter.get(`/getByAuthorId/:authorId`, getBooksByAuthorIdCtrl);
 BookRouter.get(`/searchBooks`, searchBooksCtrl);
-BookRouter.get(`/filterBooks`, filterBooksCtrl);
+BookRouter.post(`/filterBooks`, filterBooksCtrl);
 BookRouter.get(`/getRecentlyUploaded`, getRecentlyUploadedBooks);
 BookRouter.post(
   `/uploadPdf`,

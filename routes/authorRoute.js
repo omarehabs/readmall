@@ -11,6 +11,7 @@ const {
 
 const isLoggedInAndVerified = require("../middleware/isLoggedInAndVerified");
 const isAdmin = require("../middleware/isAdmin");
+const { singleImage } = require("../helpers/multerUpload");
 
 const authorRoute = express.Router();
 
@@ -26,6 +27,7 @@ authorRoute.patch(
   `/updateAuthor/:authorId`,
   isLoggedInAndVerified,
   isAdmin,
+  singleImage('/public/images','avatar', 5),
   updateAuthorCtrl
 );
 authorRoute.delete(

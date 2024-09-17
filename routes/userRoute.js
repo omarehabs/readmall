@@ -14,7 +14,6 @@ const {
 
 const isLoggedIn = require("../middleware/isLoggedIn");
 const isMe = require("../middleware/isMe");
-// const { multerConfig } = require('../helpers/multerUpload')
 const { singleImage } = require('../helpers/multerUpload')
 const userRoute = express.Router();
 

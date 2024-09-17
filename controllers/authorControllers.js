@@ -64,7 +64,7 @@ async function findAuthorByNameCtrl(req, res) {
     const mappedAuthors = authorsFound.map((author) => {
       const auth = author.toJSON()
       const count = authorsBooks.find((co) => co.authorId === author.id)
-      return {...auth,numOfBooks : count?.count ?? 0}
+      return { ...auth, numOfBooks: count?.count ?? 0 }
     })
     return successHandler(res, 200, `found ${authorsFound.length} authors successfully.`,
       { authors: mappedAuthors, },
@@ -77,6 +77,11 @@ async function findAuthorByNameCtrl(req, res) {
 
 async function updateAuthorCtrl(req, res) {
   const authorId = req.params.authorId;
+  if (req.file) {
+    req.body.authorAvatarUrl = req.body.imagePath + '/' + req.body.imageName
+    delete req.body.imagePath
+    delete req.body.imageName
+  }
   const { value, error } = updateAuthorSchema.validate(req.body);
   if (!authorId) {
     return errorHandler(res, 400, { message: 'authorId is required' });
@@ -124,7 +129,7 @@ async function getAllAuthorsCtrl(req, res) {
     const mappedAuthors = authors.authors.map((author) => {
       const auth = author.toJSON()
       const count = authorsBooks.find((co) => co.authorId === author.id)
-      return {...auth, numOfBooks : count?.count ?? 0}
+      return { ...auth, numOfBooks: count?.count ?? 0 }
     })
     return successHandler(res, 200, `found authors successfully.`, {
       numOfPages: handleNumOfPages(authors.numOfAuthors, limit, 10),
