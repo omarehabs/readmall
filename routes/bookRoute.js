@@ -13,14 +13,15 @@ const {
   updateBookCtrl,
 } = require("../controllers/bookControllers");
 
-const { multerConfig } = require("../helpers/multerUpload");
+// const { multerConfig } = require("../helpers/multerUpload");
+const { multipleFields } = require("../helpers/multerUpload");
 const BookRouter = express.Router();
 
 const isLoggedInAndVerified = require("../middleware/isLoggedInAndVerified");
 const ifLogged = require("../middleware/ifLogged");
 const isAdmin = require("../middleware/isAdmin");
 
-BookRouter.get(`/getById/:id`,ifLogged, getBookByIdCtrl);
+BookRouter.get(`/getById/:id`, ifLogged, getBookByIdCtrl);
 BookRouter.get(`/getByCategoryId/:categoryId`, getCategoryBooksCtrl);
 BookRouter.get(`/getByViews`, getMostViewedBooksCtrl);
 BookRouter.get(`/getByPublisherId/:publisherId`, getBooksByPublisherIdCtrl);
@@ -31,10 +32,10 @@ BookRouter.get(`/getRecentlyUploaded`, getRecentlyUploadedBooks);
 BookRouter.post(
   `/uploadPdf`,
   isLoggedInAndVerified,
-  multerConfig().fields([
+  multipleFields('/public/books', [
     { name: "pdf", maxCount: 1 },
     { name: "cover", maxCount: 1 },
-  ]),
+  ], 12),
   addBookCtrl
 );
 BookRouter.patch(

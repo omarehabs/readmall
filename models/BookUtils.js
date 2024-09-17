@@ -68,8 +68,10 @@ Book.getBookById = async (bookId) => {
 };
 
 Book.findByCategoryId = async function (categoryId, limit, page) {
-  const book = await Book.findAndCountAll({
-    where: { categoryId },
+  const whereObj = { categoryId }
+
+  const books = await Book.findAll({
+    where: whereObj,
     include: [
       { model: Author, attributes: ["authorName", "id"] },
       { model: Publisher, attributes: ["publisherName", "id"] },
@@ -92,22 +94,28 @@ Book.findByCategoryId = async function (categoryId, limit, page) {
     ...handlePagination(limit, page),
   });
 
-  const rates = await Review.getBooksTotalRate(book.rows.map((book) => {
+  const booksCount = await Book.count({ where: whereObj })
+
+  const rates = await Review.getBooksTotalRate(books.map((book) => {
     const bk = book.toJSON()
     return bk.id
   }))
-  const mappedBooksWithRate = book.rows.map((book) => {
+
+  const mappedBooksWithRate = books.map((book) => {
     const bk = book.toJSON()
     let rate = rates.find((bookRate) => bookRate.dataValues.bookId === bk.id)
     return { ...bk, totalReviewsRate: +rate?.dataValues.avgRating ?? 0 }
   })
 
 
-  return { count: book.count, rows: mappedBooksWithRate };
+  return { count: booksCount, rows: mappedBooksWithRate };
 };
 
 Book.findByMostViewed = async function (limit, page) {
-  const book = await Book.findAndCountAll({
+
+  const booksCount = await Book.count()
+
+  const books = await Book.findAll({
 
     include: [
 
@@ -132,23 +140,28 @@ Book.findByMostViewed = async function (limit, page) {
     ...handlePagination(limit, page),
   });
 
-  const rates = await Review.getBooksTotalRate(book.rows.map((book) => {
+
+  const rates = await Review.getBooksTotalRate(books.map((book) => {
     const bk = book.toJSON()
     return bk.id
   }))
-  const mappedBooksWithRate = book.rows.map((book) => {
+  const mappedBooksWithRate = books.map((book) => {
     const bk = book.toJSON()
     let rate = rates.find((bookRate) => bookRate.dataValues.bookId === bk.id)
     return { ...bk, totalReviewsRate: +rate?.dataValues.avgRating ?? 0 }
   })
 
 
-  return { count: book.count, rows: mappedBooksWithRate };
+  return { count: booksCount, rows: mappedBooksWithRate };
 };
 
 Book.getBooksByAuthorId = async function (authorId, limit, page) {
-  const book = await Book.findAndCountAll({
-    where: { authorId },
+
+  const whereObj = { authorId }
+  const booksCount = await Book.count({ where: whereObj })
+
+  const books = await Book.findAll({
+    where: whereObj,
     include: [
       { model: Author, attributes: ["authorName", "id"] },
       { model: Publisher, attributes: ["publisherName", "id"] },
@@ -172,11 +185,12 @@ Book.getBooksByAuthorId = async function (authorId, limit, page) {
     ...handlePagination(limit, page),
   });
   // if (!book) throw new Error('There no book with such ID.');
-  return book;
+  return { count: booksCount, rows: books };
 };
 
 Book.getBooksByPublisherId = async function (publisherId, limit, page) {
-  const book = await Book.findAndCountAll({
+  const booksCount = await Book.count()
+  const books = await Book.findAll({
     where: { publisherId },
     include: [
       { model: Author, attributes: ["authorName", "id"] },
@@ -200,8 +214,8 @@ Book.getBooksByPublisherId = async function (publisherId, limit, page) {
 
     ...handlePagination(limit, page),
   });
-  // if (!book) throw new Error('There no book with such ID.');
-  return book;
+
+  return { count: booksCount, rows: books };
 };
 
 Book.getBooksAddedRecently = async function (limit, page) {
@@ -228,7 +242,7 @@ Book.getBooksAddedRecently = async function (limit, page) {
 
     ...handlePagination(limit, page),
   });
-  const numOfBooks = await Book.count();
+  const booksCount = await Book.count();
 
 
   const rates = await Review.getBooksTotalRate(books.map((book) => {
@@ -242,7 +256,7 @@ Book.getBooksAddedRecently = async function (limit, page) {
   })
 
 
-  return { numOfBooks, books: mappedBooksWithRate };
+  return { count: booksCount, books: mappedBooksWithRate };
 };
 
 Book.addBook = async function (bookObj) {
@@ -251,7 +265,15 @@ Book.addBook = async function (bookObj) {
 };
 
 Book.searchBooks = async function (searchText, limit, page) {
-  const books = await Book.findAndCountAll({
+  const whereObj = {
+    [Op.or]: {
+      title: { [Op.iLike]: `%${searchText}%` },
+      subTitle: { [Op.iLike]: `%${searchText}%` },
+    },
+  }
+  const booksCount = await Book.count({ where: whereObj })
+
+  const books = await Book.findAll({
     attributes: [
       "title",
       "subTitle",
@@ -264,12 +286,7 @@ Book.searchBooks = async function (searchText, limit, page) {
       "lang",
       "copyright",
     ],
-    where: {
-      [Op.or]: {
-        title: { [Op.iLike]: `%${searchText}%` },
-        subTitle: { [Op.iLike]: `%${searchText}%` },
-      },
-    },
+    where: whereObj,
     include: [
       { model: Author, attributes: ["authorName", "id"] },
       { model: Category, attributes: ["categoryName", "id"] },
@@ -290,7 +307,21 @@ Book.searchBooks = async function (searchText, limit, page) {
 
     ...handlePagination(limit, page),
   });
-  return books;
+
+  
+  const rates = await Review.getBooksTotalRate(books.map((book) => {
+    const bk = book.toJSON()
+    return bk.id
+  }))
+  
+  const mappedBooksWithRate = books.map((book) => {
+    const bk = book.toJSON()
+    let rate = rates.find((bookRate) => bookRate.dataValues.bookId === bk.id)
+    return { ...bk, totalReviewsRate: +rate?.dataValues.avgRating ?? 0 }
+  })
+
+
+  return { count: booksCount, rows: mappedBooksWithRate };
 };
 
 Book.fiterBooks = async function (filterObject, limit, page) {
@@ -413,11 +444,13 @@ Book.fiterBooks = async function (filterObject, limit, page) {
   filter.where = whereObject;
   filter.order = [["createdAt", "DESC"]];
 
-  const books = await Book.findAndCountAll({
+  const books = await Book.findAll({
     ...filter,
     ...handlePagination(limit, page),
   });
-  return books;
+
+  const booksCount = await Book.count(filter)
+  return { count: booksCount, rows: books };
 };
 
 Book.updateBook = async function (bookId, updates) {

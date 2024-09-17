@@ -63,7 +63,7 @@ async function findAuthorByNameCtrl(req, res) {
 
     const mappedAuthors = authorsFound.map((author) => {
       const auth = author.toJSON()
-      const count = authorsBooks.find((co) => co.authorId = author.id)
+      const count = authorsBooks.find((co) => co.authorId === author.id)
       return {...auth,numOfBooks : count?.count ?? 0}
     })
     return successHandler(res, 200, `found ${authorsFound.length} authors successfully.`,
@@ -115,9 +115,20 @@ async function getAllAuthorsCtrl(req, res) {
         authors: [],
       });
     }
+
+    const authorsBooks = await Book.countAuthorBooks(authors.authors.map((author) => {
+      const auth = author.toJSON()
+      return auth.id
+    }));
+
+    const mappedAuthors = authors.authors.map((author) => {
+      const auth = author.toJSON()
+      const count = authorsBooks.find((co) => co.authorId === author.id)
+      return {...auth, numOfBooks : count?.count ?? 0}
+    })
     return successHandler(res, 200, `found authors successfully.`, {
       numOfPages: handleNumOfPages(authors.numOfAuthors, limit, 10),
-      authors: authors.authors,
+      authors: mappedAuthors,
     });
   } catch (e) {
     return errorHandler(res, 400, e);

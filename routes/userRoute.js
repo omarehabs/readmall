@@ -14,13 +14,14 @@ const {
 
 const isLoggedIn = require("../middleware/isLoggedIn");
 const isMe = require("../middleware/isMe");
-const { multerConfig } = require('../helpers/multerUpload')
+// const { multerConfig } = require('../helpers/multerUpload')
+const { singleImage } = require('../helpers/multerUpload')
 const userRoute = express.Router();
 
 userRoute.post(`/signup`, signupCtrl);
 userRoute.post(`/login`, loginCtrl);
 userRoute.get(`/me`, isLoggedIn, getMeCtrl);
-userRoute.patch(`/editMyProfile`, isLoggedIn, multerConfig().single('avatar'), editMyProfileCtrl);
+userRoute.patch(`/editMyProfile`, isLoggedIn, singleImage('/public/images', 'avatar', 5), editMyProfileCtrl);
 userRoute.get(`/verify/:userId/:verificatoionToken`, verfiyUserEmailCtrl);
 userRoute.get(`/requestNewToken/:userId`, requestNewTokenCtrl);
 userRoute.post(`/forgotPassword`, forgotPasswordCtrl);

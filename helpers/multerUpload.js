@@ -1,5 +1,5 @@
 const multer = require('multer');
-
+const {join} = require('path')
 function multerConfig() {
     const storage = multer.memoryStorage();
 
@@ -37,6 +37,121 @@ function multerConfig() {
     });
 };
 
+
 module.exports = {
-    multerConfig
+    singleImage: (path, field, maxSizeInMB = 5) => {
+        const storage = multer.diskStorage({
+            destination: (req, file, cb) => {
+                console.log(path, 'wherw file got saved')
+                req.body.imagePath = path
+                console.log(join(__dirname, '..',  path), 'in multer path')
+                cb(null, join(__dirname, '..',  path));
+            },
+            filename: (req, file, cb) => {
+                const name = Date.now() + '-' + file.originalname.replace(/\s/g, "")
+                req.body.imageName = name
+                console.log('in multer 2')
+                cb(null, name);
+            },
+        });
+
+        const limits = {
+            fileSize: maxSizeInMB * 1024 * 1024
+        };
+
+        return multer({
+            storage,
+            fileFilter(req, file, callback) {
+                const orgName = file.originalname;
+                if (!orgName.toLowerCase().match(/\.(png|jpg|jpeg)$/i)) {
+                    return callback(new Error('error uploading file'));
+                }
+                console.log('in multer 3')
+                return callback(null, true)
+            },
+            limits,
+        }).single(field)
+
+    },
+    singlePdf: (path, field, maxSizeInMB = 5) => {
+        const storage = multer.diskStorage({
+            destination: (req, file, cb) => {
+                console.log(path, 'wherw file got saved')
+                req.body.pdfPath = path
+                console.log(join(__dirname, '..',  path), 'in multer path')
+                cb(null, join(__dirname, '..',  path));
+            },
+            filename: (req, file, cb) => {
+                const name = Date.now() + '-' + file.originalname.replace(/\s/g, "")
+                req.body.pdfName = name
+                console.log('in multer 2')
+                cb(null, name);
+            },
+        });
+
+        const limits = {
+            fileSize: maxSizeInMB * 1024 * 1024
+        };
+
+        return multer({
+            storage,
+            fileFilter(req, file, callback) {
+                const orgName = file.originalname;
+                if (!orgName.toLowerCase().match(/\.(png|jpg|jpeg)$/i)) {
+                    return callback(new Error('error uploading file'));
+                }
+                console.log('in multer 3')
+                return callback(null, true)
+            },
+            limits,
+        }).single(field)
+
+    },
+    multipleFiles: (path, field, maxSizeInMB = 5) => {
+        const storage = multer.diskStorage({
+            destination: (req, file, cb) => {
+                req.body.path = path
+                cb(null, join(__dirname, '..',  path));
+            },
+            filename: (req, file, cb) => {
+                const name = Date.now() + '-' + file.originalname.replace(/\s/g, "")
+                cb(null, name);
+            },
+        });
+
+        const limits = {
+            fileSize: maxSizeInMB * 1024 * 1024
+        };
+
+        return multer({
+            storage,
+            limits,
+        }).array(field, maxCount)
+
+    },
+    multipleFields: (path, fields, maxSizeInMB = 5, maxCount) => {
+
+        const storage = multer.diskStorage({
+            destination: (req, file, cb) => {
+                req.body.path = path
+                cb(null, join(__dirname, '..',  path));
+            },
+            filename: (req, file, cb) => {
+                const name = Date.now() + '-' + file.originalname.replace(/\s/g, "")
+                cb(null, name);
+            },
+        });
+
+        const limits = {
+            fileSize: maxSizeInMB * 1024 * 1024
+        };
+
+        return multer({
+            storage,
+            limits,
+        }).fields(fields)
+
+    }
 };
+
+// module.exports =  {multerConfig} 

@@ -18,6 +18,7 @@ const updateUserSchema = Joi.object({
     password: Joi.string().min(8).max(110),
     phoneNum: Joi.string(),
     avatarUrl: Joi.string().uri(),
+    gender: Joi.string().valid('male', 'female')
 }).or('fullname', 'address', 'email', 'password', 'phoneNum', 'avatarUrl',);
 
 module.exports = {

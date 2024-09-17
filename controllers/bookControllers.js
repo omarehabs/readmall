@@ -24,6 +24,7 @@ async function getBookByIdCtrl(req, res) {
     return errorHandler(res, 404, "bookId is required!");
   }
 
+
   try {
     let { book, recommendations } = await Book.getBookById(id);
     if (book) {
@@ -52,29 +53,37 @@ async function getBookByIdCtrl(req, res) {
 }
 
 async function addBookCtrl(req, res) {
+
+  // let files = [];
+  // if (req.files != null) {
+  //   const arr = (req.files).map((file) => {
+  //     return { path: path + "/" + file.filename };
+  //   });
+  //   files = arr;
+  // }
+  // if (!files.pdf || !files.cover) {
+  //   return errorHandler(res, 400, {
+  //     message: "pdf file and book cover are required!",
+  //   });
+  // }
+
+
+  const pdf = req.files.pdf[0];
+  const pdfTitle = req.body.path + "/" + pdf.filename
+
+  const cover = req.files.cover[0];
+  const coverTitle = req.body.path + "/" + cover.filename
+  delete req.body.path
   const { value, error } = createBookSchema.validate(req.body);
-  const files = req.files;
-  // console.log(files);
-  if (!files.pdf || !files.cover) {
-    return errorHandler(res, 400, {
-      message: "pdf file and book cover are required!",
-    });
-  }
   if (error) {
     return errorHandler(res, 400, error);
   }
-
-  const pdf = files.pdf[0];
-  const pdfTitle = nameFiles(pdf.originalname);
-
-  const cover = files.cover[0];
-  const coverTitle = nameFiles(cover.originalname);
-  value.cover = coverTitle;
+  value.coverUrl = coverTitle;
   value.bookUrl = pdfTitle;
   value.size = pdf.size;
   try {
-    const pdfDoc = await PDFDocument.load(pdf.buffer);
-    value.pages = pdfDoc.getPageCount();
+    // const pdfDoc = await PDFDocument.load(pdf.buffer);
+    value.pages = 100 //pdfDoc.getPageCount();
     // const metaDataOfPdf = await uploadToS3Bucket(bucketName, pdfTitle, pdf.buffer, pdf.type);
     // const statusCodeResPdf = metaDataOfPdf['$metadata']['httpStatusCode'];
     // if (statusCodeResPdf !== 200) {
@@ -204,7 +213,7 @@ async function getBooksByPublisherIdCtrl(req, res) {
 async function getRecentlyUploadedBooks(req, res) {
   const { limit, page } = req.query;
   try {
-   const books= await Book.getBooksAddedRecently(
+    const books = await Book.getBooksAddedRecently(
       limit,
       page
     );
@@ -215,8 +224,8 @@ async function getRecentlyUploadedBooks(req, res) {
       });
     }
     return successHandler(res, 200, `found books successfully.`, {
-      numOfPages: handleNumOfPages(books.numOfBooks, limit, 10),
-      books : books.books,
+      numOfPages: handleNumOfPages(books.count, limit, 10),
+      books: books.books,
     });
   } catch (e) {
     return errorHandler(res, 400, e);
@@ -308,6 +317,7 @@ async function updateBookCtrl(req, res) {
     return errorHandler(res, 400, e);
   }
 }
+
 module.exports = {
   addBookCtrl,
   getBookByIdCtrl,
@@ -320,8 +330,3 @@ module.exports = {
   filterBooksCtrl,
   updateBookCtrl,
 };
-// const { count, rows: products } = await getAllProductsByCategoryName({
-//   categoryName : categoryName.toLowerCase(),
-//   limit: !limit ? undefined : parseInt(limit, 10),
-//   pageNum: !page ? 1 : parseInt(page, 10),
-// });

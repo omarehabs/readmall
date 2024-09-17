@@ -1,15 +1,17 @@
 const { Op } = require("sequelize");
-const Author = require("./schemas/AuthorSchema");
-const Book = require("./schemas/BookSchema");
+const Author = require("./schemas/AuthorSchema.js");
+const Book = require("./schemas/BookSchema.js");
+const handlePagination = require("../utils/handlePagination.js");
 
 Author.createAuthor = async function (authorObj) {
   const authorCreated = await Author.create(authorObj);
   return authorCreated;
 };
-Author.getAllAuthors = async function () {
-  const authors = await Author.findAll();
+Author.getAllAuthors = async function (limit, page) {
+  const authors = await Author.findAll(handlePagination(limit, page),
+  );
   const numOfAuthors = await Author.count()
-  return {authors, numOfAuthors};
+  return { authors, numOfAuthors };
 };
 
 Author.getAuthorById = async function (id) {

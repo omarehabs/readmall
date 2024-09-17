@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 // const session = require('express-session');
 // const SequelizeSess = require('connect-session-sequelize')(session.Store);
 const cookieParser = require('cookie-parser');
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
 });
 app.use(express.json());
 app.use(cookieParser());
+app.use('/public', express.static(path.join(__dirname, "public",)));
 
 const VER1 = '/api/v1';
 app.use(`${VER1}/authors`, authorRoute);
